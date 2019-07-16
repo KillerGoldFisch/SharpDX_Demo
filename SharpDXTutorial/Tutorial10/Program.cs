@@ -76,7 +76,7 @@ namespace Tutorial10
                     });
 
                 //render target
-                SharpRenderTarget target = new SharpRenderTarget(device, 512, 512, Format.R8G8B8A8_UNorm);
+                SharpRenderTarget target = new SharpRenderTarget(device, 512, 512, Format.B8G8R8A8_UNorm);
 
                 //init constant buffer
                 Buffer11 phongConstantBuffer = phongShader.CreateBuffer<PhongData>();
@@ -84,6 +84,8 @@ namespace Tutorial10
 
                 //init frame counter
                 fpsCounter.Reset();
+
+                var capture = false;
 
                 //effect inside shader
                 int mode = 0;
@@ -102,6 +104,9 @@ namespace Tutorial10
                             break;
                         case Keys.D4:
                             mode = 3;
+                            break;
+                        case Keys.D5:
+                            capture = true;
                             break;
                     }
                 };
@@ -170,6 +175,12 @@ namespace Tutorial10
 
                     //Set original targets
                     device.SetDefaultTargers();
+
+                    if(capture)
+                    {
+                        target.ToBitmap().Save("Test.jpg");
+                        capture = false;
+                    }
 
                     //apply shader
                     renderTargetShader.Apply();
